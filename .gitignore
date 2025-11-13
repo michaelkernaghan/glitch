@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Generated output
+examples_output/
+
+# User imported images (keep these in git)
+# imported_images/ - commented out so your source images are tracked
+
+# Image files in root (ignore)
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+
+# Collections (generated)
+collection_*/
+rarity_collection/
+signature_collection/
+evolution_series/
+palette_variations/
+batch_processed/
+samples_to_glitch/
+sample_collection/
+my_nft_collection/
+nft_collection/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
