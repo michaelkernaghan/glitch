@@ -7,7 +7,7 @@ Advanced Animated Glitch Effects
 - Masking and targeted effects
 """
 
-from src.glitch_effects import GlitchArtist
+import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
 from PIL import Image, ImageDraw, ImageEnhance
 import numpy as np
 import sys

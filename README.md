@@ -39,29 +39,50 @@ pip install -r requirements.txt
 **Simple Method:**
 ```bash
 # Put your image in imported_images/ folder, then:
-python glitch_my_image.py imported_images/your_photo.jpg
+python scripts/glitch_my_image.py imported_images/your_photo.jpg
 
 # Or specify intensity
-python glitch_my_image.py imported_images/your_photo.jpg high
+python scripts/glitch_my_image.py imported_images/your_photo.jpg high
 ```
 
 **Advanced Method (Choose Effects):**
 ```bash
 # Interactive - pick which effect to apply
-python advanced_glitch.py imported_images/your_photo.jpg
+python scripts/advanced_glitch.py imported_images/your_photo.jpg
 
 # Preset styles (vaporwave, cyberpunk, retro, etc.)
-python advanced_glitch.py imported_images/your_photo.jpg presets
+python scripts/advanced_glitch.py imported_images/your_photo.jpg presets
+```
+
+**Animated Glitch Art:**
+```bash
+# Fast flashing strobe effect
+python scripts/glitch_animated.py imported_images/your_image.jpg flash strobe
+
+# Color pulse overlay (like reaper.gif!)
+python scripts/color_flash_overlay.py imported_images/your_image.jpg pulse
+
+# Multi-overlay with color variations
+python scripts/glitch_random_overlay.py imported_images/base.jpg imported_images/overlay.png
+```
+
+**Scraperboard + Glitch:**
+```bash
+# Gothic scraperboard effect
+python scripts/scraperboard_effect.py imported_images/your_image.jpg gothic
+
+# Then glitch it
+python scripts/glitch_animated.py examples_output/scraperboard_gothic_your_image.png flash strobe
 ```
 
 ### 3. Run Examples
 
 ```bash
 # Basic examples (7 different techniques)
-python example_basic.py
+python scripts/example_basic.py
 
 # Advanced examples (professional NFT collections)
-python example_advanced.py
+python scripts/example_advanced.py
 ```
 
 ### 4. Create Your First Glitch Art (from scratch)

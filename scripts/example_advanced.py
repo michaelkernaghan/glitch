@@ -3,8 +3,8 @@ Advanced Glitch Art Examples
 More sophisticated techniques for creating professional NFT collections
 """
 
-from src.glitch_effects import GlitchArtist
-from src.generative_glitch import GenerativeGlitchArt
+import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
+import sys; sys.path.append(".."); from src.generative_glitch import GenerativeGlitchArt
 import random
 import os
 

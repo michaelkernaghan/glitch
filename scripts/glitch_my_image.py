@@ -4,7 +4,7 @@ Glitch Your Own Image
 Simple script to apply glitch effects to any image you provide
 """
 
-from src.glitch_effects import GlitchArtist
+import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
 import sys
 import os
 

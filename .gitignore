@@ -8,6 +8,9 @@ venv/
 env/
 ENV/
 
+# API Keys and Config (NEVER commit these!)
+config.json
+
 # Generated output
 examples_output/
 

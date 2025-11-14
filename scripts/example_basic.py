@@ -3,8 +3,8 @@ Basic Glitch Art Examples
 Simple examples to get started with glitch art creation
 """
 
-from src.glitch_effects import GlitchArtist
-from src.generative_glitch import GenerativeGlitchArt
+import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
+import sys; sys.path.append(".."); from src.generative_glitch import GenerativeGlitchArt
 from PIL import Image
 import os
 

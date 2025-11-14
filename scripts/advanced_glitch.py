@@ -4,7 +4,7 @@ Advanced Image Glitching
 More control over individual effects
 """
 
-from src.glitch_effects import GlitchArtist
+import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
 import sys
 import os
 

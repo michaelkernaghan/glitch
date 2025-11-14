@@ -4,7 +4,7 @@ Animated Glitch Art Generator
 Create animated GIFs with flashing glitch effects
 """
 
-from src.glitch_effects import GlitchArtist
+import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
 from PIL import Image
 import sys
 import os

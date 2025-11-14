@@ -4,7 +4,7 @@ Random Overlay + Glitching Base Animation
 Flash an overlay image in random locations over a glitching base image
 """
 
-from src.glitch_effects import GlitchArtist
+import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
 from PIL import Image
 import random
 import sys

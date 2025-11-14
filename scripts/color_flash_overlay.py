@@ -132,7 +132,7 @@ def color_flash_with_glitch(input_path, output_path=None, frames=60, duration=40
     """
     Combine color flashing with glitch effects
     """
-    from src.glitch_effects import GlitchArtist
+    import sys; sys.path.append(".."); from src.glitch_effects import GlitchArtist
     
     if not os.path.exists(input_path):
         print(f"❌ Error: Image not found at {input_path}")
