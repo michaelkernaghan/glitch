@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Ranker - C0RRUPTED VISIONS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #ff0066;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #ff0066;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .stats {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #111;
+            border: 2px solid #ff0066;
+            border-radius: 10px;
+        }
+
+        .stats span {
+            margin: 0 20px;
+            font-size: 1.1em;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .nft-card {
+            background: #111;
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nft-card:hover {
+            border-color: #ff0066;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 0, 102, 0.5);
+        }
+
+        .nft-card.selected {
+            border-color: #00ff00;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+        }
+
+        .nft-image {
+            width: 100%;
+            height: 500px;
+            object-fit: contain;
+            background: #000;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .nft-image.error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .nft-image.error::after {
+            content: '⚠️ Image failed to load';
+        }
+
+        .nft-video {
+            width: 100%;
+            height: 500px;
+            object-fit: contain;
+            background: #000;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .nft-name {
+            text-align: center;
+            font-size: 1.2em;
+            color: #fff;
+            margin-top: 10px;
+            word-wrap: break-word;
+        }
+
+        .nft-elo {
+            text-align: center;
+            color: #ff0066;
+            font-size: 1.4em;
+            margin-top: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        button {
+            background: #ff0066;
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: #ff3388;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.8);
+        }
+
+        button:disabled {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .rankings-section {
+            margin-top: 50px;
+            background: #111;
+            border: 2px solid #ff0066;
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .rankings-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-shadow: 0 0 10px #ff0066;
+        }
+
+        .rankings-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            border-color: #ff0066;
+            transform: translateX(5px);
+        }
+
+        .rank-number {
+            font-size: 1.5em;
+            color: #ff0066;
+            font-weight: bold;
+            min-width: 50px;
+        }
+
+        .rank-name {
+            flex: 1;
+            color: #fff;
+            margin: 0 20px;
+        }
+
+        .rank-elo {
+            color: #00ff00;
+            font-size: 1.2em;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .rank-stats {
+            color: #666;
+            font-size: 0.9em;
+            min-width: 150px;
+            text-align: right;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 1.5em;
+            color: #ff0066;
+            padding: 50px;
+        }
+
+        .vs {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            color: #ff0066;
+            text-shadow: 0 0 30px #ff0066;
+            pointer-events: none;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .vs {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>C0RRUPTED VISIONS</h1>
+        <div class="subtitle">NFT Collection Ranker</div>
+
+        <div class="stats">
+            <span>📊 Total NFTs: <strong id="total-nfts">0</strong></span>
+            <span>⚔️ Comparisons: <strong id="total-comparisons">0</strong></span>
+        </div>
+
+        <div class="vs">VS</div>
+
+        <div class="comparison" id="comparison">
+            <div class="nft-card" id="nft1-card" onclick="selectWinner(1)">
+                <div id="nft1-media-container"></div>
+                <div class="nft-name" id="nft1-name">Loading...</div>
+                <div class="nft-elo">ELO: <span id="nft1-elo">1500</span></div>
+            </div>
+
+            <div class="nft-card" id="nft2-card" onclick="selectWinner(2)">
+                <div id="nft2-media-container"></div>
+                <div class="nft-name" id="nft2-name">Loading...</div>
+                <div class="nft-elo">ELO: <span id="nft2-elo">1500</span></div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button onclick="selectWinner(1)" id="btn-left">← Left Wins</button>
+            <button onclick="loadNewPair()">Skip</button>
+            <button onclick="selectWinner(2)" id="btn-right">Right Wins →</button>
+        </div>
+
+        <div class="button-container">
+            <button onclick="toggleRankings()">📊 View Rankings</button>
+            <button onclick="resetRankings()">🔄 Reset All</button>
+        </div>
+
+        <div class="rankings-section" id="rankings-section" style="display: none;">
+            <h2>🏆 CURRENT RANKINGS</h2>
+            <div id="rankings-list" class="loading">Loading rankings...</div>
+        </div>
+    </div>
+
+    <script>
+        let currentNFT1 = null;
+        let currentNFT2 = null;
+        let rankings = {};
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === '1') {
+                selectWinner(1);
+            } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === '2') {
+                selectWinner(2);
+            } else if (e.key === 's' || e.key === ' ') {
+                e.preventDefault();
+                loadNewPair();
+            }
+        });
+
+        function isVideo(filename) {
+            return filename.toLowerCase().match(/\.(mp4|webm|mov)$/);
+        }
+
+        function createMediaElement(path, container) {
+            container.innerHTML = '';
+            
+            // Try as image first
+            const img = document.createElement('img');
+            img.className = 'nft-image';
+            img.src = encodeURI(path);
+            
+            img.onerror = function() {
+                console.log('Image failed, trying as video:', path);
+                // Try as video
+                container.innerHTML = '';
+                const video = document.createElement('video');
+                video.className = 'nft-video';
+                video.autoplay = true;
+                video.loop = true;
+                video.muted = true;
+                video.src = encodeURI(path);
+                
+                video.onerror = function() {
+                    console.error('Both image and video failed:', path);
+                    container.innerHTML = '<div class="nft-image error"></div>';
+                };
+                
+                container.appendChild(video);
+            };
+            
+            container.appendChild(img);
+        }
+
+        async function loadNewPair() {
+            const response = await fetch('/api/random-pair');
+            const data = await response.json();
+            
+            currentNFT1 = data.nft1;
+            currentNFT2 = data.nft2;
+            
+            // Load media with auto-detection
+            const container1 = document.getElementById('nft1-media-container');
+            const container2 = document.getElementById('nft2-media-container');
+            
+            createMediaElement(data.nft1.path, container1);
+            createMediaElement(data.nft2.path, container2);
+            
+            document.getElementById('nft1-name').textContent = data.nft1.name;
+            document.getElementById('nft2-name').textContent = data.nft2.name;
+            
+            // Load current ELOs
+            await loadRankings();
+            updateELODisplay();
+            
+            // Remove selection
+            document.getElementById('nft1-card').classList.remove('selected');
+            document.getElementById('nft2-card').classList.remove('selected');
+        }
+
+        async function selectWinner(side) {
+            if (!currentNFT1 || !currentNFT2) return;
+            
+            const winner = side === 1 ? currentNFT1.name : currentNFT2.name;
+            const loser = side === 1 ? currentNFT2.name : currentNFT1.name;
+            
+            // Visual feedback
+            const winnerCard = document.getElementById(`nft${side}-card`);
+            winnerCard.classList.add('selected');
+            
+            // Record vote
+            await fetch('/api/vote', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({winner, loser})
+            });
+            
+            // Load new pair after short delay
+            setTimeout(loadNewPair, 500);
+            
+            // Update stats
+            updateStats();
+        }
+
+        async function loadRankings() {
+            const response = await fetch('/api/rankings');
+            rankings = await response.json();
+        }
+
+        function updateELODisplay() {
+            if (!currentNFT1 || !currentNFT2) return;
+            
+            const nft1Data = rankings.find(r => r.name === currentNFT1.name);
+            const nft2Data = rankings.find(r => r.name === currentNFT2.name);
+            
+            if (nft1Data) {
+                document.getElementById('nft1-elo').textContent = Math.round(nft1Data.elo);
+            }
+            if (nft2Data) {
+                document.getElementById('nft2-elo').textContent = Math.round(nft2Data.elo);
+            }
+        }
+
+        async function updateStats() {
+            const response = await fetch('/api/stats');
+            const stats = await response.json();
+            
+            document.getElementById('total-nfts').textContent = stats.total_nfts;
+            document.getElementById('total-comparisons').textContent = stats.total_comparisons;
+        }
+
+        async function toggleRankings() {
+            console.log('Toggle rankings clicked');
+            const section = document.getElementById('rankings-section');
+            const isHidden = section.style.display === 'none' || section.style.display === '';
+            
+            console.log('Section hidden:', isHidden);
+            
+            if (isHidden) {
+                section.style.display = 'block';
+                await displayRankings();
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        async function displayRankings() {
+            console.log('Displaying rankings...');
+            
+            try {
+                const response = await fetch('/api/rankings');
+                const rankings = await response.json();
+                
+                console.log('Got rankings:', rankings.length);
+                
+                const list = document.getElementById('rankings-list');
+                list.innerHTML = '';
+                
+                if (rankings.length === 0) {
+                    list.innerHTML = '<div class="loading">No rankings yet! Make some comparisons first.</div>';
+                    return;
+                }
+                
+                rankings.forEach((nft, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'ranking-item';
+                    
+                    item.innerHTML = `
+                        <div class="rank-number">#${index + 1}</div>
+                        <div class="rank-name">${nft.name}</div>
+                        <div class="rank-elo">${Math.round(nft.elo)} ELO</div>
+                        <div class="rank-stats">${nft.wins}W - ${nft.losses}L</div>
+                    `;
+                    
+                    list.appendChild(item);
+                });
+                
+                console.log('Rankings displayed');
+            } catch (error) {
+                console.error('Error displaying rankings:', error);
+                list.innerHTML = '<div class="loading">Error loading rankings</div>';
+            }
+        }
+
+        async function resetRankings() {
+            if (confirm('⚠️ Reset ALL rankings? This cannot be undone!')) {
+                // This would require a backend endpoint - for now just refresh
+                alert('Reset functionality - would need backend implementation');
+            }
+        }
+
+        // Initialize
+        loadNewPair();
+        updateStats();
+    </script>
+</body>
+</html>
+
